@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Creative AI School</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b10; --card:#15151d; --card2:#1c1c27; --line:#262633;
+    --text:#f3f3f7; --muted:#9a9aae; --accent:#8b5cf6; --accent2:#ec4899; --ok:#22c55e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{padding:0 16px 120px;max-width:560px;margin:0 auto}
+  b{font-weight:700}
+  .top{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+  .brand{font-weight:800;font-size:15px;letter-spacing:.2px}
+  .brand span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}
+  .langs{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:3px}
+  .langs button{border:0;background:none;color:var(--muted);font:600 12px Manrope;padding:5px 8px;border-radius:7px;cursor:pointer}
+  .langs button.on{background:var(--card2);color:var(--text)}
+  .hero{position:relative;padding:28px 20px 24px;border-radius:24px;overflow:hidden;margin-bottom:28px;
+    background:radial-gradient(120% 90% at 100% 0%,rgba(236,72,153,.35),transparent 60%),
+               radial-gradient(100% 80% at 0% 100%,rgba(139,92,246,.45),transparent 60%),var(--card)}
+  .hero h1{font-size:28px;line-height:1.15;font-weight:800;letter-spacing:-.5px;margin-bottom:10px}
+  .hero p{color:#d6d6e2;font-size:15px;line-height:1.5}
+  .stats{display:flex;gap:8px;margin-top:20px}
+  .stat{flex:1;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 8px;text-align:center}
+  .stat b{display:block;font-size:20px;font-weight:800}
+  .stat small{color:#c9c9d6;font-size:11px}
+  h2{font-size:20px;font-weight:800;margin:0 0 14px;letter-spacing:-.3px}
+  section{margin-bottom:32px}
+  .course{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-bottom:14px}
+  .course.best{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 10px 40px -10px rgba(139,92,246,.5)}
+  .course img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--card2)}
+  .cbody{padding:16px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:4px 9px;border-radius:99px;margin-bottom:8px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .course h3{font-size:18px;font-weight:800;margin-bottom:8px}
+  .desc{color:#cfcfdb;font-size:14px;line-height:1.55;white-space:pre-line;max-height:4.6em;overflow:hidden;position:relative;transition:max-height .3s}
+  .desc.open{max-height:1000px}
+  .more{background:none;border:0;color:var(--accent);font:700 13px Manrope;margin:6px 0 2px;cursor:pointer}
+  .buyrow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+  .price s{color:var(--muted);font-size:13px;display:block}
+  .price b{font-size:19px;font-weight:800}
+  .buy{border:0;border-radius:14px;padding:13px 20px;font:800 15px Manrope;color:#fff;cursor:pointer;white-space:nowrap;
+    background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .buy:active{transform:scale(.97)}
+  .author{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;align-items:flex-start}
+  .author img{width:72px;height:72px;border-radius:50%;object-fit:cover;flex-shrink:0}
+  .author div{font-size:14px;line-height:1.55;white-space:pre-line;color:#d6d6e2}
+  .reviews{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+  .reviews img{height:260px;border-radius:14px;scroll-snap-align:start;border:1px solid var(--line)}
+  .faq{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 16px;font-size:14px;line-height:1.55;white-space:pre-line;color:#d6d6e2}
+  .faq-box{padding:10px 0}
+  .contact{display:block;text-align:center;background:var(--card);border:1px solid var(--line);color:var(--text);
+    text-decoration:none;border-radius:14px;padding:14px;font-weight:700;margin-top:8px}
+  .empty{color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand" id="brand"></div>
+  <div class="langs" id="langs"></div>
+</div>
+<div class="hero">
+  <h1 id="hero_title"></h1>
+  <p id="hero_sub"></p>
+  <div class="stats" id="stats"></div>
+</div>
+<section><h2 id="sec_courses"></h2><div id="courses"></div></section>
+<section id="author_sec"><h2 id="sec_author"></h2><div class="author" id="author"></div></section>
+<section id="reviews_sec"><h2 id="sec_reviews"></h2><div class="reviews" id="reviews"></div></section>
+<section><h2 id="sec_faq"></h2><div class="faq" id="faq"></div>
+  <a class="contact" id="contact" href="#"></a></section>
+
+<script>
+const DATA = {"languages": ["uz", "ru", "en"], "currency": "so'm", "manager": "@your_username", "bot_username": "creativeai_school_bot", "webapp": {"brand": "Creative AI School", "hero_title": {"uz": "Sun'iy intellekt va dizaynni noldan o'rganing", "ru": "Освойте AI и дизайн с нуля", "en": "Master AI and design from scratch"}, "hero_sub": {"uz": "Amaliy darslar, real loyihalar va birinchi mijozlar. ✏️", "ru": "Практика, реальные проекты и первые клиенты. ✏️", "en": "Hands-on lessons, real projects and your first clients. ✏️"}, "stats": [{"num": "500+", "uz": "o'quvchi", "ru": "учеников", "en": "students"}, {"num": "40+", "uz": "dars", "ru": "уроков", "en": "lessons"}, {"num": "∞", "uz": "umrbod kirish", "ru": "доступ навсегда", "en": "lifetime access"}], "sec_courses": {"uz": "Kurslar", "ru": "Курсы", "en": "Courses"}, "sec_author": {"uz": "Muallif", "ru": "Автор", "en": "Author"}, "sec_reviews": {"uz": "Fikrlar", "ru": "Отзывы", "en": "Reviews"}, "sec_faq": {"uz": "Savollar", "ru": "Вопросы", "en": "FAQ"}, "best": {"uz": "Eng foydali", "ru": "Выгоднее всего", "en": "Best value"}, "details": {"uz": "Batafsil", "ru": "Подробнее", "en": "Details"}, "menu_button": {"uz": "🚀 Ochish", "ru": "🚀 Открыть", "en": "🚀 Open"}}, "author": {"photo": "", "text": {"uz": "👋 Salom! Men — ✏️ Ism.\n\n✏️ Tajriba, natijalar, nechta o'quvchi, qaysi brendlar bilan ishlagan...\n", "ru": "👋 Привет! Я — ✏️ Имя.\n\n✏️ Опыт, результаты, сколько учеников, с какими брендами работал...\n", "en": "👋 Hi! I'm ✏️ Name.\n\n✏️ Experience, results, number of students, brands worked with...\n"}}, "reviews": {"text": {"uz": "💬 O'quvchilarimiz fikrlari:", "ru": "💬 Отзывы учеников:", "en": "💬 Student reviews:"}, "media": []}, "faq": {"uz": "<b>❓ Ko'p beriladigan savollar<\/b>\n\n<b>Kurs qancha vaqtga ochiq?<\/b>\n✏️ Umrbod.\n\n<b>Noldan boshlasam bo'ladimi?<\/b>\n✏️ Ha, kurs boshlang'ichlar uchun.\n\n<b>Kompyuter shartmi?<\/b>\n✏️ ...\n\n<b>Uy vazifalarini kim tekshiradi?<\/b>\n✏️ ...\n", "ru": "<b>❓ Частые вопросы<\/b>\n\n<b>На сколько открыт доступ?<\/b>\n✏️ Навсегда.\n\n<b>Можно с нуля?<\/b>\n✏️ Да, курс для начинающих.\n\n<b>Нужен ли компьютер?<\/b>\n✏️ ...\n\n<b>Кто проверяет домашки?<\/b>\n✏️ ...\n", "en": "<b>❓ FAQ<\/b>\n\n<b>How long do I have access?<\/b>\n✏️ Lifetime.\n\n<b>Can I start from zero?<\/b>\n✏️ Yes, the course is for beginners.\n\n<b>Do I need a computer?<\/b>\n✏️ ...\n\n<b>Who checks the homework?<\/b>\n✏️ ...\n"}, "texts": {"btn_buy": {"uz": "💳 Sotib olish", "ru": "💳 Купить", "en": "💳 Buy"}, "menu_contact": {"uz": "📞 Bog'lanish", "ru": "📞 Связаться", "en": "📞 Contact"}}, "courses": [{"id": "ai", "title": {"uz": "🤖 Sun'iy intellekt kursi", "ru": "🤖 Курс по нейросетям (AI)", "en": "🤖 AI Course"}, "price": 990000, "old_price": 1490000, "photo": "", "description": {"uz": "✏️ Kurs haqida qisqacha.\n\n<b>Nimalarni o'rganasiz:<\/b>\n• ChatGPT, Claude va boshqa sun'iy intellekt vositalari\n• Rasm va video generatsiya (Midjourney, Higgsfield ...)\n• Sun'iy intellekt yordamida pul ishlash\n\n📹 Darslar soni: ✏️\n⏳ Davomiyligi: ✏️\n🎁 Bonus: ✏️\n", "ru": "✏️ Коротко о курсе.\n\n<b>Чему научитесь:<\/b>\n• ChatGPT, Claude и другие нейросети\n• Генерация картинок и видео (Midjourney, Higgsfield ...)\n• Как зарабатывать с помощью AI\n\n📹 Уроков: ✏️\n⏳ Длительность: ✏️\n🎁 Бонус: ✏️\n", "en": "✏️ Short course overview.\n\n<b>What you'll learn:<\/b>\n• ChatGPT, Claude and other AI tools\n• Image and video generation (Midjourney, Higgsfield ...)\n• How to make money with AI\n\n📹 Lessons: ✏️\n⏳ Duration: ✏️\n🎁 Bonus: ✏️\n"}, "best": null}, {"id": "design", "title": {"uz": "🎨 Grafik dizayn kursi", "ru": "🎨 Курс по графическому дизайну", "en": "🎨 Graphic Design Course"}, "price": 990000, "old_price": 1490000, "photo": "", "description": {"uz": "✏️ Kurs haqida qisqacha.\n\n<b>Nimalarni o'rganasiz:<\/b>\n• Photoshop / Figma asoslari\n• Kompozitsiya, rang, tipografika\n• Banner, logotip, SMM-dizayn\n• Portfolio va birinchi mijozlar\n\n📹 Darslar soni: ✏️\n⏳ Davomiyligi: ✏️\n", "ru": "✏️ Коротко о курсе.\n\n<b>Чему научитесь:<\/b>\n• Основы Photoshop / Figma\n• Композиция, цвет, типографика\n• Баннеры, логотипы, SMM-дизайн\n• Портфолио и первые клиенты\n\n📹 Уроков: ✏️\n⏳ Длительность: ✏️\n", "en": "✏️ Short course overview.\n\n<b>What you'll learn:<\/b>\n• Photoshop / Figma basics\n• Composition, color, typography\n• Banners, logos, social media design\n• Portfolio and your first clients\n\n📹 Lessons: ✏️\n⏳ Duration: ✏️\n"}, "best": null}, {"id": "mix", "title": {"uz": "🔥 MIX: Sun'iy intellekt + Dizayn", "ru": "🔥 МИКС: AI + Дизайн", "en": "🔥 MIX: AI + Design"}, "price": 1490000, "old_price": 1980000, "photo": "", "description": {"uz": "Ikkala kurs bitta paketda — <b>tejamkor narxda<\/b>.\n\nSun'iy intellekt yordamida dizayn qilishni o'rganing:\ntezroq ishlang, ko'proq buyurtma oling. ✏️\n", "ru": "Оба курса в одном пакете — <b>выгоднее<\/b>.\n\nНаучитесь делать дизайн с помощью нейросетей:\nработайте быстрее, берите больше заказов. ✏️\n", "en": "Both courses in one bundle — <b>at a better price<\/b>.\n\nLearn to design with AI:\nwork faster and take on more clients. ✏️\n"}, "best": true}]};
+const tg = window.Telegram && Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); try{tg.setHeaderColor('#0b0b10');tg.setBackgroundColor('#0b0b10')}catch(e){} }
+
+const LANGS = DATA.languages;
+const NAMES = {uz:"UZ", ru:"RU", en:"EN"};
+let lang = (() => {
+  try { const s = localStorage.getItem('lang'); if (s && LANGS.includes(s)) return s; } catch(e){}
+  const code = tg?.initDataUnsafe?.user?.language_code || navigator.language || '';
+  if (code.startsWith('ru')) return 'ru';
+  if (code.startsWith('en') && LANGS.includes('en')) return 'en';
+  return LANGS[0];
+})();
+
+const tr = v => (v && typeof v === 'object') ? (v[lang] || v[LANGS[0]] || '') : (v || '');
+const money = n => n.toLocaleString('ru-RU').replace(/ /g,' ') + ' ' + DATA.currency;
+const $ = id => document.getElementById(id);
+
+function buy(id){
+  const url = `https://t.me/${DATA.bot_username}?start=buy_${id}`;
+  if (tg) { tg.HapticFeedback?.impactOccurred('medium'); tg.openTelegramLink(url); tg.close(); }
+  else location.href = url;
+}
+
+function render(){
+  document.documentElement.lang = lang;
+  const W = DATA.webapp;
+  $('brand').innerHTML = W.brand.replace(/(\S+)$/, '<span>$1</span>');
+  $('langs').innerHTML = LANGS.map(l => `<button class="${l===lang?'on':''}" data-l="${l}">${NAMES[l]||l}</button>`).join('');
+  $('hero_title').textContent = tr(W.hero_title);
+  $('hero_sub').innerHTML = tr(W.hero_sub);
+  $('stats').innerHTML = (W.stats||[]).map(s => `<div class="stat"><b>${s.num}</b><small>${tr(s)}</small></div>`).join('');
+  ['sec_courses','sec_author','sec_reviews','sec_faq'].forEach(k => $(k).textContent = tr(W[k]));
+
+  $('courses').innerHTML = DATA.courses.map(c => `
+    <div class="course ${c.best?'best':''}">
+      ${c.photo && c.photo.startsWith('http') ? `<img src="${c.photo}" alt="">` : ''}
+      <div class="cbody">
+        ${c.best ? `<span class="badge">${tr(W.best)}</span>` : ''}
+        <h3>${tr(c.title)}</h3>
+        <div class="desc" id="d_${c.id}">${tr(c.description)}</div>
+        <button class="more" data-more="${c.id}">${tr(W.details)} ↓</button>
+        <div class="buyrow">
+          <div class="price">${c.old_price ? `<s>${money(c.old_price)}</s>` : ''}<b>${money(c.price)}</b></div>
+          <button class="buy" data-buy="${c.id}">${tr(DATA.texts.btn_buy)}</button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  const A = DATA.author;
+  $('author').innerHTML = `${A.photo && A.photo.startsWith('http') ? `<img src="${A.photo}" alt="">` : ''}<div>${tr(A.text)}</div>`;
+
+  const media = (DATA.reviews.media||[]).filter(u => u.startsWith('http'));
+  $('reviews_sec').style.display = media.length ? '' : 'none';
+  $('reviews').innerHTML = media.map(u => `<img src="${u}" alt="" loading="lazy">`).join('');
+
+  $('faq').innerHTML = `<div class="faq-box">${tr(DATA.faq)}</div>`;
+  $('contact').textContent = tr(DATA.texts.menu_contact) + ' · ' + DATA.manager;
+  $('contact').href = 'https://t.me/' + DATA.manager.replace('@','');
+}
+
+document.addEventListener('click', e => {
+  const l = e.target.closest('[data-l]');
+  if (l) { lang = l.dataset.l; try{localStorage.setItem('lang', lang)}catch(_){} render(); return; }
+  const m = e.target.closest('[data-more]');
+  if (m) { const d = $('d_'+m.dataset.more); d.classList.toggle('open'); m.textContent = tr(DATA.webapp.details) + (d.classList.contains('open')?' ↑':' ↓'); return; }
+  const b = e.target.closest('[data-buy]');
+  if (b) buy(b.dataset.buy);
+  const c = e.target.closest('#contact');
+  if (c && tg) { e.preventDefault(); tg.openTelegramLink(c.href); }
+});
+render();
+</script>
+</body>
+</html>
